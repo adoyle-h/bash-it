@@ -55,16 +55,6 @@ do
   _load_bash_it_files $file_type
 done
 
-# Load colors first so they can be used in base theme
-# shellcheck source=./themes/colors.theme.bash
-source "${BASH_IT}/themes/colors.theme.bash"
-# shellcheck source=./themes/base.theme.bash
-source "${BASH_IT}/themes/base.theme.bash"
-
-# appearance (themes) now, after all dependencies
-# shellcheck source=./lib/appearance.bash
-source $APPEARANCE_LIB
-
 # Load custom aliases, completion, plugins
 for file_type in "aliases" "completion" "plugins"
 do
@@ -76,7 +66,7 @@ do
 done
 
 # Custom
-CUSTOM="${BASH_IT_CUSTOM:=${BASH_IT}/custom}/*.bash ${BASH_IT_CUSTOM:=${BASH_IT}/custom}/**/*.bash"
+CUSTOM="${BASH_IT_CUSTOM:=${BASH_IT}/custom}/*.bash"
 for config_file in $CUSTOM
 do
   if [ -e "${config_file}" ]; then
@@ -85,10 +75,24 @@ do
   fi
 done
 
+# Custom - enabled
+CUSTOM_ENABLED="${BASH_IT_CUSTOM:=${BASH_IT}/custom}/enabled/*.bash"
+for config_file in $CUSTOM_ENABLED
+do
+  if [ -f "${config_file}" ]; then
+    # shellcheck disable=SC1090
+    source "$config_file"
+  fi
+done
+
 unset config_file
 if [[ $PROMPT ]]; then
     export PS1="\[""$PROMPT""\]"
 fi
+
+# appearance (themes) now, after all dependencies
+# shellcheck disable=SC1090
+source "$APPEARANCE_LIB"
 
 # Adding Support for other OSes
 PREVIEW="less"

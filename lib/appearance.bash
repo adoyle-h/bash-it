@@ -14,6 +14,9 @@ if [[ $BASH_IT_THEME ]]; then
     elif [[ -f "$CUSTOM_THEME_DIR/$BASH_IT_THEME/$BASH_IT_THEME.theme.bash" ]]; then
         source "$CUSTOM_THEME_DIR/$BASH_IT_THEME/$BASH_IT_THEME.theme.bash"
     else
+        # Load colors first so they can be use in base theme
+        source "${BASH_IT}/themes/colors.theme.bash"
+        source "${BASH_IT}/themes/base.theme.bash"
         source "$BASH_IT/themes/$BASH_IT_THEME/$BASH_IT_THEME.theme.bash"
     fi
 fi
